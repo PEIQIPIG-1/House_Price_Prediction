@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="./index.js"></script>
     <title>My Map</title>
     <style>
@@ -12,11 +13,8 @@
             padding: 0;
         }
         #map{
-            
-            margin: 0 auto;
-            margin-top: 20px;
-            width: 70%;
-            height: 80%;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -25,6 +23,5 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBleQ2vJhLXd8jFOsy0rDdt4itnQrvbiXQ&callback=initMap">
     </script>
-    <p id="test"></p>
 </body>
 </html>
