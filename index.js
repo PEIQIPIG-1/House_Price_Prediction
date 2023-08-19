@@ -1,55 +1,39 @@
 var map;
 
 
-
 function initMap(){
     var options = {
         zoom: 10,
         center: {lat: -32.1158387, lng:115.8424257},
         mapId: '281418b42608306f'
     };
+    
 
     map = new google.maps.Map(document.getElementById('map'),options);
+    const geocoder = new google.maps.Geocoder();
 
-    // Papa.parse("./all_perth_310121.csv",{
-    //     download: false,
-    //     header: true,
-    //     complete: function(results) {
-    //         const houseData = results.data;
-    //         const geocoder = new google.maps.Geocoder();
-    //         geocodeAddresses(geocoder, map, houseData);
-    //         console.log(results);
+    getData(geocoder);
+
+
+
+    // const address = "1 Acorn Place, Perth, Australia";
+    // const geocoder = new google.maps.Geocoder();
+
+    // geocoder.geocode({
+    //     address: address
+    // }, (results, status) => {
+    //     if (status == google.maps.GeocoderStatus.OK) {
+    //         console.log(results[0].geometry.location.lat());
+    //         console.log(results[0].geometry.location.lng());
+    //         addMarker({
+    //             coords:{lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()}
+    //         })
+    //     } else {
+    //         alert('Geocode was not successful for the following reason: ' + status);
     //     }
     // });
 
-    const address = "1 Acorn Place, Perth, Australia";
-    const geocoder = new google.maps.Geocoder();
 
-    geocoder.geocode({
-        address: address
-    }, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-            console.log(results[0].geometry.location.lat());
-            console.log(results[0].geometry.location.lng());
-            addMarker({
-                coords:{lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()}
-            })
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-
-
-
-    // addMarker({
-    //     coords:{lat: 39.916668, lng:116.383331},
-    //     iconImage:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-    //     content:'<h1>Beijing</h1>'
-    // });
-    // addMarker({
-    //     coords:{lat:40.37636 , lng:115.22403},
-    //     content:'<h1>Zhuolu</h1>'
-    // });
     
     //find position of user
     locateUser();
@@ -116,30 +100,72 @@ function locateUser(){
     });
 }
 
-// function geocodeAddresses(geocoder, map, houseData) {
-//     houseData.forEach(house => {
-//       geocoder.geocode({ address: house.ADDRESS }, (results, status) => {
-//         if (status === "OK") {
-//           const marker = new google.maps.Marker({
-//             position: results[0].geometry.location,
-//             map: map,
-//             title: `Price: $${house.PRICE}`
-//           });
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+        browserHasGeolocation
+        ? "Error: The Geolocation service failed."
+        : "Error: Your browser doesn't support geolocation."
+    );
+    infoWindow.open(map);
+}
 
-//           const infoWindow = new google.maps.InfoWindow({
-//             content: `Price: $${house.PRICE}`
-//           });
+async function getData(geocoder){
+    const response = await fetch('all_perth_310121.csv');  // Fetch the CSV file
+    const data = await response.text();
+    //console.log(data);
 
-//           marker.addListener('click', () => {
-//             infoWindow.open(map, marker);
-//           });
-//         } else {
-//           console.error("Geocode was not successful for the following reason: " + status);
-//         }
-//       });
-//     });
-//   }
+    const rows = data.split('\n').slice(1);
+    //only part of the data
+    for(i=0;i<50;i++){
+        const element = rows[i];
+        const row = element.split(',');
+        const address = row[0]+","+row[1]+","+"Perth";
+        geocoder.geocode({
+                address: address
+                }, (results, status) => {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        addMarker({
+                            coords:{lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()}
+                        })
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+    }
 
+    //deal with all of the data
+    // rows.forEach(element=>{
+    //     const row = element.split(',');
+    //     //console.log(row);
+    //     const address = row[0]+","+row[1]+","+"Perth";
+    //     //console.log(address);
+    
+    //use lat and lng in csv, speed is low
+    //     const lat = parseFloat(row[14]);
+    //     const lng = parseFloat(row[15]);
+    //     addMarker({coords:{lat:lat,lng:lng}});
+
+    //use geocoder convert address to lat and lng, cant't load massive data
+    //     // geocoder.geocode({
+    //     // address: address
+    //     // }, (results, status) => {
+    //     //     if (status == google.maps.GeocoderStatus.OK) {
+    //     //         console.log(results[0].geometry.location.lat());
+    //     //         console.log(results[0].geometry.location.lng());
+    //     //         addMarker({
+    //     //             coords:{lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()}
+    //     //         })
+    //     //     } else {
+    //     //         alert('Geocode was not successful for the following reason: ' + status);
+    //     //     }
+    //     // });
+
+    // })
+    
+
+    
+}
 
 
 //add marker
@@ -162,18 +188,15 @@ function addMarker(properties){
         });
     }
 }
+    // addMarker({
+    //     coords:{lat: 39.916668, lng:116.383331},
+    //     iconImage:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+    //     content:'<h1>Beijing</h1>'
+    // });
 
 
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
-        browserHasGeolocation
-        ? "Error: The Geolocation service failed."
-        : "Error: Your browser doesn't support geolocation."
-    );
-    infoWindow.open(map);
-}
+
 
 
 
