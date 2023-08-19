@@ -1,4 +1,8 @@
 var map;
+const ylabels = [];
+for(i=0;i<11;i++){
+    ylabels.push(0);
+}
 
 
 function initMap(){
@@ -37,6 +41,9 @@ function initMap(){
     
     //find position of user
     locateUser();
+
+
+    initCanvas();
     
 
     
@@ -115,35 +122,67 @@ async function getData(geocoder){
     const data = await response.text();
     //console.log(data);
 
-    const rows = data.split('\n').slice(1);
+    const table = data.split('\n').slice(1);
     //only part of the data
     for(i=0;i<1000;i++){
-        const element = rows[i];
-        const row = element.split(',');
-        const address = row[0]+","+row[1]+","+"Perth";
-        geocoder.geocode({
-                address: address
-                }, (results, status) => {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        addMarker({
-                            coords:{lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()}
-                        })
-                    } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
-                    }
-                });
+        const row = table[i];
+        const column = row.split(',');
+        //console.log(column);
+        const address = column[0]+","+column[1]+","+"Perth";
+        const price = parseInt(column[2]);
+        if(price >= 2000000){
+            ylabels[10] += 1;
+        }else if(price >= 1500000){
+            ylabels[9] += 1;
+        }else if(price >= 1000000){
+            ylabels[8] += 1;
+        }else if(price >= 900000){
+            ylabels[7] += 1;
+        }else if(price >= 800000){
+            ylabels[6] += 1;
+        }else if(price >= 700000){
+            ylabels[5] += 1;
+        }else if(price >= 600000){
+            ylabels[4] += 1;
+        }else if(price >= 500000){
+            ylabels[3] += 1;
+        }else if(price >= 400000){
+            ylabels[2] += 1;
+        }else if(price >= 300000){
+            ylabels[1] += 1;
+        }else {
+            ylabels[0] += 1;
+        }
+
+        const lat = parseFloat(column[14]);
+        const lng = parseFloat(column[15]);
+        addMarker({coords:{lat:lat,lng:lng}});
+
+        //geocode has limit on times of usage
+        // geocoder.geocode({
+        //         address: address
+        //         }, (results, status) => {
+        //             if (status == google.maps.GeocoderStatus.OK) {
+        //                 addMarker({
+        //                     coords:{lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()}
+        //                 })
+        //             } else {
+        //                 alert('Geocode was not successful for the following reason: ' + status);
+        //             }
+        //         });
+
     }
 
     //deal with all of the data
-    // rows.forEach(element=>{
-    //     const row = element.split(',');
-    //     //console.log(row);
-    //     const address = row[0]+","+row[1]+","+"Perth";
+    // table.forEach(row=>{
+    //     const column = row.split(',');
+    //     //console.log(column);
+    //     const address = column[0]+","+column[1]+","+"Perth";
     //     //console.log(address);
     
     //use lat and lng in csv, speed is low
-    //     const lat = parseFloat(row[14]);
-    //     const lng = parseFloat(row[15]);
+    //     const lat = parseFloat(column[14]);
+    //     const lng = parseFloat(column[15]);
     //     addMarker({coords:{lat:lat,lng:lng}});
 
     //use geocoder convert address to lat and lng, cant't load massive data
@@ -195,9 +234,29 @@ function addMarker(properties){
     // });
 
 
+async function initCanvas(){
+    await getData();
+        const ctx = document.getElementById('myChart');
+        console.log(ylabels);
+      
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['under 300K', '300K-400K', '400K-500K', '500K-600K', '600K-700k', '700k-800k','800k-900k','900k-1m','1m-1.5m','1.5m-2m','over 2m'],
+            datasets: [{
+              label: 'the amount of house within corresponding price range',
+              data: ylabels,
+              borderWidth: 1
+            }]
+          }
+        });
+}
+
 
 
 
 
 
 initMap();
+
+
