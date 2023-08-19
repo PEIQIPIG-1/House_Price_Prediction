@@ -117,7 +117,7 @@ async function getData(geocoder){
 
     const rows = data.split('\n').slice(1);
     //only part of the data
-    for(i=0;i<50;i++){
+    for(i=0;i<1000;i++){
         const element = rows[i];
         const row = element.split(',');
         const address = row[0]+","+row[1]+","+"Perth";
