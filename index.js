@@ -1,4 +1,5 @@
 var map;
+var heatmap;
 const ylabels = [];
 for(i=0;i<11;i++){
     ylabels.push(0);
@@ -18,6 +19,7 @@ function initMap(){
     map = new google.maps.Map(document.getElementById('map'),options);
     const geocoder = new google.maps.Geocoder();
     document.getElementById("hide-markers").addEventListener("click", hideMarkers);
+    document.getElementById("toggle-heatmap").addEventListener("click", toggleHeatmap);
 
     getData(geocoder);
 
@@ -122,11 +124,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
-function hideMarkers(){
-    markers.forEach(marker => {
-        marker.setMap(marker.getMap() ? null : map);
-    });
-}
+
 
 async function getData(geocoder){
     const response = await fetch('all_perth_310121.csv');  // Fetch the CSV file
@@ -240,10 +238,37 @@ async function getData(geocoder){
 }
 async function setHeatMap(){
     await getData();
-    var heatmap = new google.maps.visualization.HeatmapLayer({
+    heatmap = new google.maps.visualization.HeatmapLayer({
         data: heatMapData
       });
+      const gradient = [
+        "rgba(0, 255, 255, 0)",
+        "rgba(0, 255, 255, 1)",
+        "rgba(0, 191, 255, 1)",
+        "rgba(0, 127, 255, 1)",
+        "rgba(0, 63, 255, 1)",
+        "rgba(0, 0, 255, 1)",
+        "rgba(0, 0, 223, 1)",
+        "rgba(0, 0, 191, 1)",
+        "rgba(0, 0, 159, 1)",
+        "rgba(0, 0, 127, 1)",
+        "rgba(63, 0, 91, 1)",
+        "rgba(127, 0, 63, 1)",
+        "rgba(191, 0, 31, 1)",
+        "rgba(255, 0, 0, 1)",
+      ];
+    
+      heatmap.set("gradient", gradient);
       heatmap.setMap(map);
+}
+function toggleHeatmap() {
+    heatmap.setMap(heatmap.getMap() ? null : map);
+}
+
+function hideMarkers(){
+    markers.forEach(marker => {
+        marker.setMap(marker.getMap() ? null : map);
+    });
 }
 
 
