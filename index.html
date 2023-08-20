@@ -16,6 +16,14 @@
             width: 100%;
             height: 90%;
         }
+        #floating-panel {
+            position: absolute;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            text-align: center;
+            font-family: "Roboto", "sans-serif";
+        }
         #chartContainer{
             width: 70%;
             margin: 20px auto;
@@ -23,12 +31,15 @@
     </style>
 </head>
 <body>
+    <div id="floating-panel">
+        <button id="hide-markers">Hide Markers</button>
+      </div>
     <div id="map"></div>
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
     </div>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBleQ2vJhLXd8jFOsy0rDdt4itnQrvbiXQ&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBleQ2vJhLXd8jFOsy0rDdt4itnQrvbiXQ&libraries=visualization&callback=initMap">
     </script>
     
 </body>

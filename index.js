@@ -3,6 +3,8 @@ const ylabels = [];
 for(i=0;i<11;i++){
     ylabels.push(0);
 }
+var heatMapData = [];
+var markers = [];
 
 
 function initMap(){
@@ -15,6 +17,7 @@ function initMap(){
 
     map = new google.maps.Map(document.getElementById('map'),options);
     const geocoder = new google.maps.Geocoder();
+    document.getElementById("hide-markers").addEventListener("click", hideMarkers);
 
     getData(geocoder);
 
@@ -44,6 +47,8 @@ function initMap(){
 
 
     initCanvas();
+
+    setHeatMap();
     
 
     
@@ -117,46 +122,74 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
+function hideMarkers(){
+    markers.forEach(marker => {
+        marker.setMap(marker.getMap() ? null : map);
+    });
+}
+
 async function getData(geocoder){
     const response = await fetch('all_perth_310121.csv');  // Fetch the CSV file
     const data = await response.text();
     //console.log(data);
 
     const table = data.split('\n').slice(1);
-    //only part of the data
+    //only a part of the data
     for(i=0;i<1000;i++){
         const row = table[i];
         const column = row.split(',');
         //console.log(column);
         const address = column[0]+","+column[1]+","+"Perth";
         const price = parseInt(column[2]);
+        const lat = parseFloat(column[14]);
+        const lng = parseFloat(column[15]);
         if(price >= 2000000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 11});
             ylabels[10] += 1;
         }else if(price >= 1500000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 10});
             ylabels[9] += 1;
         }else if(price >= 1000000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 9});
             ylabels[8] += 1;
         }else if(price >= 900000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 8});
             ylabels[7] += 1;
         }else if(price >= 800000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 7});
             ylabels[6] += 1;
         }else if(price >= 700000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 6});
             ylabels[5] += 1;
         }else if(price >= 600000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 5});
             ylabels[4] += 1;
         }else if(price >= 500000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 4});
             ylabels[3] += 1;
         }else if(price >= 400000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 3});
             ylabels[2] += 1;
         }else if(price >= 300000){
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 2});
             ylabels[1] += 1;
         }else {
+            heatMapData.push({location: new google.maps.LatLng(lat, lng), weight: 1});
             ylabels[0] += 1;
         }
 
-        const lat = parseFloat(column[14]);
-        const lng = parseFloat(column[15]);
-        addMarker({coords:{lat:lat,lng:lng}});
+        
+        addMarker({coords:{lat:lat,lng:lng},
+        content:
+        "<p>"+"Address: "+address+"</p>"+
+        "<p>"+"Price: "+column[2]+"</p>"+
+        "<p>"+"Bedrooms: "+column[3]+"</p>"+
+        "<p>"+"Bathrooms: "+column[4]+"</p>"+
+        "<p>"+"Garage: "+column[5]+"</p>"+
+        "<p>"+"Land Area: "+column[6]+"</p>"+
+        "<p>"+"Floor Area: "+column[7]+"</p>"+
+        "<p>"+"Build Yead: "+column[8]+"</p>"
+        });
 
         //geocode has limit on times of usage
         // geocoder.geocode({
@@ -205,13 +238,20 @@ async function getData(geocoder){
 
     
 }
+async function setHeatMap(){
+    await getData();
+    var heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatMapData
+      });
+      heatmap.setMap(map);
+}
 
 
 //add marker
 function addMarker(properties){
     var marker = new google.maps.Marker({
         position:properties.coords,
-        map:map
+        map:map,
     });
 
     if(properties.iconImage){
@@ -226,6 +266,7 @@ function addMarker(properties){
             inforWindow.open(map,marker);
         });
     }
+    markers.push(marker);
 }
     // addMarker({
     //     coords:{lat: 39.916668, lng:116.383331},
@@ -237,7 +278,7 @@ function addMarker(properties){
 async function initCanvas(){
     await getData();
         const ctx = document.getElementById('myChart');
-        console.log(ylabels);
+        //console.log(ylabels);
       
         new Chart(ctx, {
           type: 'bar',
@@ -251,8 +292,6 @@ async function initCanvas(){
           }
         });
 }
-
-
 
 
 
