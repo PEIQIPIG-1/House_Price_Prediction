@@ -27,17 +27,25 @@
             width: 70%;
             margin: 20px auto;
         }
+        #search_box{
+            width: 50%;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
-    <div id="floating-panel">
-        <button id="hide-markers">Hide Markers</button>
-        <button id="toggle-heatmap">Toggle Heatmap</button>
-      </div>
-    <div id="map"></div>
-    <div id="chartContainer">
-        <canvas id="myChart"></canvas>
+    <div id="search_box">
+        <input type="text" id="address_input">
+        <button id="search">Search</button>
     </div>
+        <div id="floating-panel">
+            <button id="hide-markers">Hide Markers</button>
+            <button id="toggle-heatmap">Toggle Heatmap</button>
+        </div>
+        <div id="map"></div>
+        <div id="chartContainer">
+            <canvas id="myChart"></canvas>
+        </div>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBleQ2vJhLXd8jFOsy0rDdt4itnQrvbiXQ&libraries=visualization&callback=initMap">
     </script>
