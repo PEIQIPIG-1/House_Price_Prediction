@@ -17,8 +17,8 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById('map'), options);
     const geocoder = new google.maps.Geocoder();
-    document.getElementById("hide-markers").addEventListener("click", hideMarkers);
-    document.getElementById("toggle-heatmap").addEventListener("click", toggleHeatmap);
+    // document.getElementById("hide-markers").addEventListener("click", hideMarkers);
+    // document.getElementById("toggle-heatmap").addEventListener("click", toggleHeatmap);
     document.getElementById("search").addEventListener("click", searchAddress);
 
     getData(geocoder);
@@ -46,6 +46,8 @@ function initMap() {
 
     //find position of user
     locateUser();
+    hideMarkers();
+    toggleHeatmap();
 
 
     initCanvas();
@@ -225,6 +227,7 @@ async function getData(geocoder) {
         // addMarker({
         //     coords: { lat: lat, lng: lng },
         //     content:
+        //         "<p>" + "Address: " + column[13] + "</p>" +
         //         "<p>" + "Price: " + column[0] + 'k' + "</p>" +
         //         "<p>" + "Bedrooms: " + column[1] + "</p>" +
         //         "<p>" + "Bathrooms: " + column[2] + "</p>" +
@@ -363,13 +366,30 @@ async function setHeatMap() {
     heatmap.setMap(map);
 }
 function toggleHeatmap() {
-    heatmap.setMap(heatmap.getMap() ? null : map);
+    const locationButton = document.createElement("button");
+
+    locationButton.textContent = "hide heatmap";
+    locationButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    locationButton.addEventListener("click", () => {
+        heatmap.setMap(heatmap.getMap() ? null : map);
+    });
+
+    
 }
 
 function hideMarkers() {
-    markers.forEach(marker => {
-        marker.setMap(marker.getMap() ? null : map);
+    const locationButton = document.createElement("button");
+
+    locationButton.textContent = "hide markers";
+    locationButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    locationButton.addEventListener("click", () => {
+        markers.forEach(marker => {
+            marker.setMap(marker.getMap() ? null : map);
+        });
     });
+    
 }
 function deleteMarkers() {
     markers.forEach(marker => {
