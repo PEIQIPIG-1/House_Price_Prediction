@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./index.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>My Map</title>
+</head>
+
+<body>
+    <div id="search_box">
+        <input type="text" id="address_input" placeholder='input the address you want to find'>
+        <button id="search">Search</button>
+    </div>
+
+    <button id="back"><a href="http://13.239.117.249:3330/" alt=""
+        style="text-decoration: none; color: black;">Back</a></button>
+
+    <img id="outputImage" alt="" style="margin-top: 20px;">
+
+    <div id="floating-panel">
+        <button id=""class="btu"onclick="generateImage()" style="margin-left: 15%;">Generate Image</button>
+        <button id="hide-markers"class="btu" style="margin-left: 25%;">Hide Markers</button>
+        <button id="toggle-heatmap"class="btu" style="margin-left: 25%;">Toggle Heatmap</button>
+    </div>
+    <div id="map"></div>
+    <div id="chartContainer">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBleQ2vJhLXd8jFOsy0rDdt4itnQrvbiXQ&libraries=visualization&callback=initMap">
+    </script>
+
+</body>
+
+</html>
