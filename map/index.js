@@ -1,4 +1,5 @@
 var map;
+//let deatureLayer;
 var heatmap;
 var info;
 const ylabels = [];
@@ -16,6 +17,48 @@ function initMap() {
     };
 
     map = new google.maps.Map(document.getElementById('map'), options);
+
+    // featureLayer = map.getFeatureLayer("LOCALITY");
+    // const featureStyleOptions = {
+    //     strokeColor: "#810FCB",
+    //     strokeOpacity: 1.0,
+    //     strokeWeight: 3.0,
+    //     fillColor: "#810FCB",
+    //     fillOpacity: 0.5,
+    //   };
+    //   featureLayer.style = (options) => {
+    //     // ChIJVTPokywQkFQRmtVEaUZlJRA
+    //     if (options.feature.placeId == "ChIJN3gtg4xckFQRPuBki2urgOI") {
+
+    //       return featureStyleOptions;
+    //     }
+    //   };
+
+    const featureLayer = map.getFeatureLayer(
+        google.maps.FeatureType.ADMINISTRATIVE_AREA_LEVEL_2
+    );
+
+    featureLayer.style = (featureStyleFunctionOptions) => {
+        const placeFeature = featureStyleFunctionOptions.feature;
+        const id = states[placeFeature.placeId];
+        let fillColor;
+
+        // Specify colors using any of the following:
+        // * Named ('green')
+        // * Hexadecimal ('#FF0000')
+        // * RGB ('rgb(0, 0, 255)')
+        // * HSL ('hsl(60, 100%, 50%)')
+        if (id==1) {
+            fillColor = "gray";
+        }
+        return {
+            fillColor,
+            fillOpacity: 0.5,
+        };
+    };
+    const states = {
+        "ChIJN3gtg4xckFQRPuBki2urgOI":1, //seattle
+    };
     const geocoder = new google.maps.Geocoder();
     document.getElementById("hide-markers").addEventListener("click", hideMarkers);
     document.getElementById("toggle-heatmap").addEventListener("click", toggleHeatmap);
@@ -62,6 +105,7 @@ function locateUser() {
         }
     });
 }
+
 async function searchAddress() {
     deleteMarkers();
     const response = await fetch('clean_data(1).csv');
@@ -83,7 +127,7 @@ async function searchAddress() {
                     "<p>" + "Bathrooms: " + column[2] + "</p>" +
                     "<p>" + "Sqm living: " + column[3] + "</p>" +
                     "<p>" + "Year built: " + column[11] + "</p>",
-                index: parseFloat(column[18])
+                index: parseFloat(column[18]),
             })
         }
 
@@ -180,19 +224,47 @@ function toggleHeatmap() {
 
 function hideMarkers() {
     markers.forEach(marker => {
-        marker.setMap(marker.getMap() ? null : map);
+        marker.setMap(marker.map == null ? map : null);
     });
 }
 function deleteMarkers() {
     markers.forEach(marker => {
         marker.setMap(null);
     });
-    markers = []; 
+    markers = [];
 }
 
-function addMarker(properties) {
-    var marker = new google.maps.Marker({
+// function addMarker(properties) {
+//     var marker = new google.maps.Marker({
+//         position: properties.coords,
+//         map: map,
+//     });
+
+
+//     if (properties.iconImage) {
+//         marker.setIcon(properties.iconImage);
+//     }
+
+//     if (properties.content) {
+//         var inforWindow = new google.maps.InfoWindow({
+//             content: properties.content
+//         });
+//         marker.addListener('click', function () {
+//             inforWindow.open(map, marker);
+//         });
+//     }
+//     marker.addListener("click", () => {
+//         info = properties.index;
+//     })
+//     markers.push(marker);
+// }
+
+async function addMarker(properties) {
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    const {CollisionBehavior} = await google.maps.importLibrary("marker")
+    const marker = new AdvancedMarkerElement({
         position: properties.coords,
+        collisionBehavior: CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY,
         map: map,
     });
 
@@ -208,7 +280,7 @@ function addMarker(properties) {
             inforWindow.open(map, marker);
         });
     }
-    marker.addListener("click",()=>{
+    marker.addListener("click", () => {
         info = properties.index;
     })
     markers.push(marker);
