@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.693ff578.css",
+    "main.js": "/static/js/main.3d52a204.js",
+    "static/media/video.mp4": "/static/media/video.af7c72445e8238943707.mp4",
+    "static/media/H.jpg": "/static/media/H.bb2f441fb3635a5d2b9f.jpg",
+    "static/media/bahnschrift-webfont.woff": "/static/media/bahnschrift-webfont.9b2eaa09fd2a632dcb1d.woff",
+    "static/media/bahnschrift-webfont.woff2": "/static/media/bahnschrift-webfont.81d9e34bff27d32ab404.woff2",
+    "index.html": "/index.html",
+    "main.693ff578.css.map": "/static/css/main.693ff578.css.map",
+    "main.3d52a204.js.map": "/static/js/main.3d52a204.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.693ff578.css",
+    "static/js/main.3d52a204.js"
+  ]
+}
