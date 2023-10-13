@@ -269,14 +269,14 @@ async function setHeatMap() {
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(heatdeom);
 }
 function hideHeatmap() {
-    //heatmap.setMap(heatmap.getMap() ? null : map);
-    map = null;
-    var options = {
-        zoom: 10,
-        center: { lat: 47.5245285, lng: -122.3668965 },
-        mapId: '281418b42608306f'
-    };
-    map = new google.maps.Map(document.getElementById('map'), options);
+    heatmap.setMap(heatmap.getMap() ? null : map);
+    // map = null;
+    // var options = {
+    //     zoom: 10,
+    //     center: { lat: 47.5245285, lng: -122.3668965 },
+    //     mapId: '281418b42608306f'
+    // };
+    // map = new google.maps.Map(document.getElementById('map'), options);
 }
 
 function hideMarkers() {
