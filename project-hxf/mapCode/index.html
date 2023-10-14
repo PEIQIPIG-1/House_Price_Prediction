@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./index.js"></script>
+    <script src="./price_size.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="icon" href="homepage.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="homepage.ico" type="image/x-icon">
+    <title>Map</title>
+</head>
+
+<body>
+    <div id="searchBox">
+        <input type="text" id="address_input" placeholder='search address'>
+        <img id="search_img" src="search.png" alt="#">
+    </div>
+
+    <!-- <button id="back"><a href="http://13.239.117.249:3330/" alt=""
+        style="text-decoration: none; color: black;">Back</a></button> -->
+
+    <div class="image-container">
+        <img id="outputImage" alt="" style="margin-top: 20px;">
+        <span id="delete-button" onclick="deleteImage()">X</span>
+    </div>
+
+    <div id="floating-panel">
+        <!-- <button id="menu" class="btu" onclick="generateImage1()">
+            <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
+            <span class="btu_span"><p class="btu_p">Click here to generate a data graph</p></span>
+        </button> -->
+        <button id="generate" class="generateImg btu" onclick="generateImage1()">
+            <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
+            <span class="btu_span"><p class="btu_p">Generate a data chart based on XGBoost algorithm when a location is clicked.</p></span>
+        </button>
+        <button id="gradient" class="generateImg btu" onclick="generateImage2()">
+            <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
+            <span class="btu_span"><p class="btu_p">Generate a data chart based on GradientBoostingRegression algorithm when a location is clicked.</p></span>
+        </button>
+        <button id="random" class="generateImg btu" onclick="generateImage3()">
+            <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
+            <span class="btu_span"><p class="btu_p">Generate a data chart based on RandomForest algorithm when a location is clicked.</p></span>
+        </button>
+        <button id="hide-markers" class="btu" >
+            <img src="signal.png" alt="" class="btu_img" style="margin-top: 8px; margin-left: 4px;">
+            <span class="btu_span"><p class="btu_p">Toggle visibility of location markers on the map.</p></span>
+        </button>
+        <button id="toggle-heatmap" class="btu" >
+            <img src="close.png" alt="" class="btu_img" style="margin-top: 11px; margin-left: 5px;">
+            <span class="btu_span"><p class="btu_p">Toggle visibility of the heatmap overlay.</p></span>
+        </button>
+        <button id="circle-heatmap" class="btu" onclick="circle()">
+            <img src="area.png" alt="" class="btu_img" style="margin-top: 11px; margin-left: 5px;">
+            <span class="btu_span"><p class="btu_p">Toggle visibility of heatmap based on area and time overlay.</p></span>
+        </button>
+    </div>
+
+    <div id="map"></div>
+
+    <img id="heat" src="heat.png" alt=""/>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBleQ2vJhLXd8jFOsy0rDdt4itnQrvbiXQ&libraries=visualization&callback=initMap">
+    </script>
+
+</body>
+
+</html>
