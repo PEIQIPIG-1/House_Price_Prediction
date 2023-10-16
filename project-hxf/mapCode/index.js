@@ -8,6 +8,7 @@ for (i = 0; i < 11; i++) {
 }
 var heatMapData = [];
 var markers = [];
+var markersSearch = [];
 
 function initMap() {
     var options = {
@@ -17,6 +18,18 @@ function initMap() {
     };
 
     map = new google.maps.Map(document.getElementById('map'), options);
+    
+    map.addListener("zoom_changed", () => {
+        const zoom = map.getZoom();
+      
+        if (zoom) {
+          // Only show each marker above a certain zoom level.
+          markers.forEach(marker => {
+            marker.setMap(zoom>14? map:null);
+        });
+        }
+      });
+
     const geocoder = new google.maps.Geocoder();
     document.getElementById("hide-markers").addEventListener("click", hideMarkers);
     document.getElementById("toggle-heatmap").addEventListener("click", toggleHeatmap);
@@ -25,8 +38,6 @@ function initMap() {
     getData(geocoder);
 
     locateUser();
-
-    initCanvas();
 
     setHeatMap();
 }
@@ -63,6 +74,17 @@ function locateUser() {
         }
     });
 }
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+        browserHasGeolocation
+            ? "Error: The Geolocation service failed."
+            : "Error: Your browser doesn't support geolocation."
+    );
+    infoWindow.open(map);
+}
+
 async function searchAddress() {
     deleteMarkers();
     const response = await fetch('clean_data(1).csv');
@@ -75,30 +97,24 @@ async function searchAddress() {
         if ((column[13] || ' ').toLowerCase().includes(address)) {
             const lat = parseFloat(column[14]);
             const lng = parseFloat(column[15]);
-            addMarker({
-                coords: { lat: lat, lng: lng },
-                content:
-                    "<p>" + "Address: " + column[13] + "</p>" +
-                    "<p>" + "Price: " + column[0] + 'k' + "</p>" +
-                    "<p>" + "Bedrooms: " + column[1] + "</p>" +
-                    "<p>" + "Bathrooms: " + column[2] + "</p>" +
-                    "<p>" + "Sqm living: " + column[3] + "</p>" +
-                    "<p>" + "Year built: " + column[11] + "</p>",
-                index: parseFloat(column[18])
-            })
+
+            const property = {
+                address: column[13],
+                price: '$' + column[0] + 'k',
+                type: "home",
+                bed: column[1],
+                bath: column[2],
+                size: column[3],
+                position: {
+                    lat: lat,
+                    lng: lng,
+                },
+                index: parseInt(column[18]),
+            }
+            addMarkerSearch(property);
         }
-
     })
-}
-
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
-        browserHasGeolocation
-            ? "Error: The Geolocation service failed."
-            : "Error: Your browser doesn't support geolocation."
-    );
-    infoWindow.open(map);
+    map.setZoom(10);
 }
 
 async function getData(geocoder) {
@@ -106,6 +122,27 @@ async function getData(geocoder) {
     const data = await response.text();
 
     const table = data.split('\n').slice(1);
+
+    table.forEach(row => {
+        const column = row.split(',');
+        const lat = parseFloat(column[14]);
+        const lng = parseFloat(column[15]);
+
+        const property = {
+            address: column[13],
+            price: '$' + column[0] + 'k',
+            type: "home",
+            bed: column[1],
+            bath: column[2],
+            size: column[3],
+            position: {
+                lat: lat,
+                lng: lng,
+            },
+            index: parseInt(column[18]),
+        }
+        addMarker(property);
+    })
 
     for (i = 0; i < 4000; i++) {
         const row = table[i];
@@ -182,36 +219,68 @@ function hideMarkers() {
     markers.forEach(marker => {
         marker.setMap(marker.getMap() ? null : map);
     });
+    markersSearch.forEach(marker => {
+        marker.setMap(marker.map == null ? map : null);
+    });
 }
+
 function deleteMarkers() {
     markers.forEach(marker => {
         marker.setMap(null);
     });
-    markers = []; 
+    markersSearch.forEach(marker =>{
+        marker.setMap(null);
+    })
+    markers = [];
+    markersSearch = [];
 }
 
-function addMarker(properties) {
-    var marker = new google.maps.Marker({
-        position: properties.coords,
+async function addMarker(property) {
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    const { CollisionBehavior } = await google.maps.importLibrary("marker");
+
+    const marker = new AdvancedMarkerElement({
+        position: property.position,
+        collisionBehavior: CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY,
+        map: null,
+    });
+
+
+    var inforWindow = new google.maps.InfoWindow({
+        content: buildContent(property)
+    });
+    marker.addListener('click', function () {
+        inforWindow.open(map, marker);
+    });
+
+    marker.addListener("click", () => {
+        info = property.index;
+    })
+    markers.push(marker);
+}
+
+async function addMarkerSearch(property){
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    const { CollisionBehavior } = await google.maps.importLibrary("marker");
+
+    const marker = new AdvancedMarkerElement({
+        position: property.position,
+        collisionBehavior: CollisionBehavior.REQUIRED,
         map: map,
     });
 
-    if (properties.iconImage) {
-        marker.setIcon(properties.iconImage);
-    }
 
-    if (properties.content) {
-        var inforWindow = new google.maps.InfoWindow({
-            content: properties.content
-        });
-        marker.addListener('click', function () {
-            inforWindow.open(map, marker);
-        });
-    }
-    marker.addListener("click",()=>{
-        info = properties.index;
+    var inforWindow = new google.maps.InfoWindow({
+        content: buildContent(property)
+    });
+    marker.addListener('click', function () {
+        inforWindow.open(map, marker);
+    });
+
+    marker.addListener("click", () => {
+        info = property.index;
     })
-    markers.push(marker);
+    markersSearch.push(marker);
 }
 
 function generateImage1() {
@@ -256,22 +325,34 @@ function generateImage3() {
     }
 }
 
-async function initCanvas() {
-    await getData();
-    const ctx = document.getElementById('myChart');
-    //console.log(ylabels);
+function buildContent(property) {
+    const content = document.createElement("div");
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['under 300K', '300K-400K', '400K-500K', '500K-600K', '600K-700k', '700k-800k', '800k-900k', '900k-1m', '1m-1.5m', '1.5m-2m', 'over 2m'],
-            datasets: [{
-                label: 'the amount of house within corresponding price range',
-                data: ylabels,
-                borderWidth: 1
-            }]
-        }
-    });
+    content.classList.add("property");
+    content.innerHTML = `
+      <div class="details">
+          <div class="price">${property.price}</div>
+          <div class="address">${property.address}</div>
+          <div class="features">
+            <div>
+                <img class="icon" src=./icon/bed.png>
+                
+                <span>${property.bed}</span>
+            </div>
+            <div>
+                <img class="icon" src=./icon/bathtub.png>
+                
+                <span>${property.bath}</span>
+            </div>
+            <div>
+                <img class="icon" src=./icon/ruler.png>
+                
+                <span>${property.size} m<sup>2</sup></span>
+            </div>
+          </div>
+      </div>
+      `;
+    return content;
 }
 
 function deleteImage() {

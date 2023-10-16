@@ -45090,10 +45090,3 @@ function circle() {
     }
     eventEnabled = !eventEnabled;
 }
-
-var myButton = document.getElementById('circle-heatmap');
-myButton.addEventListener('click', function () {
-    if(eventEnabled){
-        myButton.removeEventListener('click', circle);
-    }
-});

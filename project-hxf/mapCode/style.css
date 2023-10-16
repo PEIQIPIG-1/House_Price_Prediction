@@ -204,3 +204,51 @@ body {
     width: 400px;
     display: none;
 }
+
+#chartContainer {
+    width: 70%;
+    margin: 20px auto;
+}
+
+  .property {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+    height: 80px;
+    padding: 8px 15px;
+    width: auto;
+  }
+  .property::after {
+    border-top: 9px solid #FFFFFF;
+  }
+  .property .details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .property .address {
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+  }
+  .property .features {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  .property .features > div {
+    align-items: center;
+    background: #F5F5F5;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: flex;
+    font-size: 10px;
+    gap: 5px;
+    padding: 5px;
+    margin-left: 20px;
+  }
+.icon {
+    width: 30px;
+    height: 30px;
+}
