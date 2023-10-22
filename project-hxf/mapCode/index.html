@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./index.js"></script>
-    <script src="./price_size.js"></script>
+    <!-- <script src="./price_size.js"></script> -->
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" href="homepage.ico" type="image/x-icon">
     <link rel="shortcut icon" href="homepage.ico" type="image/x-icon">
@@ -19,28 +19,25 @@
         <img id="search_img" src="search.png" alt="#">
     </div>
 
-    <!-- <button id="back"><a href="http://13.239.117.249:3330/" alt=""
-        style="text-decoration: none; color: black;">Back</a></button> -->
-
     <div class="image-container">
         <img id="outputImage" alt="" style="margin-top: 20px;">
         <span id="delete-button" onclick="deleteImage()">X</span>
     </div>
 
     <div id="floating-panel">
-        <!-- <button id="menu" class="btu" onclick="generateImage1()">
-            <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
-            <span class="btu_span"><p class="btu_p">Click here to generate a data graph</p></span>
-        </button> -->
-        <button id="generate" class="generateImg btu" onclick="generateImage1()">
+        <button id="back" class="btu">
+            <a href="http://13.239.117.249:3330/" alt=""><img src="return.png" alt="" class="btu_img" style="margin-top: 7px;margin-left: 4px;"></a>
+            <span class="btu_span"><p class="btu_p">Return to home page.</p></span>
+        </button>
+        <button id="generate" class=" btu" onclick="generateImage1()">
             <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
             <span class="btu_span"><p class="btu_p">Generate a data chart based on XGBoost algorithm when a location is clicked.</p></span>
         </button>
-        <button id="gradient" class="generateImg btu" onclick="generateImage2()">
+        <button id="gradient" class="btu" onclick="generateImage2()">
             <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
             <span class="btu_span"><p class="btu_p">Generate a data chart based on GradientBoostingRegression algorithm when a location is clicked.</p></span>
         </button>
-        <button id="random" class="generateImg btu" onclick="generateImage3()">
+        <button id="random" class="btu" onclick="generateImage3()">
             <img src="photo.png" alt="" class="btu_img" style="margin-top: 9px;margin-left: 4px;">
             <span class="btu_span"><p class="btu_p">Generate a data chart based on RandomForest algorithm when a location is clicked.</p></span>
         </button>

@@ -7,25 +7,23 @@ body {
     padding: 0;
 }
 
-#searchBox{
+#searchBox {
     height: 40px;
     width: 400px;
     z-index: 3;
-    border-bottom: 2px solid #0057fa;
     position: absolute;
     left: 220px;
     top: 10px;
     background-color: rgb(255, 255, 255);
-    border: 2px rgb(0, 0, 0);
     box-shadow: 5px 5px 5px -3px rgba(0, 0, 0, 0.5);
     border-radius: 40px;
 }
 
-#address_input{
+#address_input {
     width: 320px;
     border: none;
     background: none;
-    line-height:35px;
+    line-height: 35px;
     font-size: 17px;
     font-weight: 500;
     margin-left: 15px;
@@ -34,7 +32,7 @@ body {
     z-index: 3;
 }
 
-#search_img{
+#search_img {
     position: absolute;
     top: 8px;
     left: 355px;
@@ -42,22 +40,6 @@ body {
     width: 28px;
     cursor: pointer;
     z-index: 3;
-}
-
-#back{
-    position: absolute;
-    left: 75%;
-    top: 10px;
-    height: 35px;
-    border: 2px solid rgb(26, 248, 222);
-    background-color: rgba(255, 255, 255, 0.82);
-    border-radius: 10px;
-    width: 70px;
-    font-size: 18px;
-    font-weight: 540;
-    overflow: hidden;
-    text-align: center;
-    justify-content: center;
 }
 
 #map {
@@ -70,7 +52,7 @@ body {
     font-family: "Roboto", "sans-serif";
 }
 
-.btu{
+.btu {
     height: 60px;
     width: 60px;
     border: 2px solid rgb(17, 126, 111);
@@ -84,19 +66,19 @@ body {
     display: flex;
 }
 
-.btu:hover{
+.btu:hover {
     width: 300px;
 }
 
-#hide-markers:hover{
+#hide-markers:hover {
     width: 300px;
 }
 
-#toggle-heatmap:hover{
+#toggle-heatmap:hover {
     width: 300px;
 }
 
-.btu_span{
+.btu_span {
     margin-left: 10px;
     margin-top: -8px;
     width: 250px;
@@ -105,72 +87,60 @@ body {
     font-size: 13px;
 }
 
-.btu_img{
+.btu_img {
     width: 38px;
     height: 38px;
 }
 
-#generate{
+#back {
+    position: absolute;
+    top: 90px;
+    left: 10px;
+}
+
+#generate {
     position: absolute;
     top: 160px;
     left: 10px;
 }
 
-#gradient{
+#gradient {
     position: absolute;
     top: 230px;
     left: 10px;
 }
 
-#random{
+#random {
     position: absolute;
     top: 300px;
     left: 10px;
 }
 
-#menu{
+#menu {
     position: absolute;
     top: 160px;
     left: 10px;
 }
 
-/* #menu:hover ~ #generate{
-    position: absolute;
-    top: 90px;
-    left: 90px;
-}
-
-#menu:hover ~ #gradient{
-    position: absolute;
-    top: 160px;
-    left: 120px;
-}
-
-#menu:hover ~ #random{
-    position: absolute;
-    top: 230px;
-    left: 90px;
-} */
-
-#hide-markers{
+#hide-markers {
     position: absolute;
     top: 370px;
     left: 10px;
 }
 
-#toggle-heatmap{
+#toggle-heatmap {
     position: absolute;
     top: 440px;
     left: 10px;
 }
 
-#circle-heatmap{
+#circle-heatmap {
     position: absolute;
     top: 510px;
     left: 10px;
 }
 
-#outputImage{
+#outputImage {
     position: absolute;
     top: 380px;
     left: 100px;
@@ -179,7 +149,7 @@ body {
     z-index: 2;
 }
 
-#delete-button{
+#delete-button {
     display: none;
     font-size: 20px;
     font-weight: 500;
@@ -190,14 +160,14 @@ body {
     cursor: pointer;
 }
 
-#outputImage:not([src]){
+#outputImage:not([src]) {
     opacity: 0;
     border: none;
     visibility: hidden;
     max-width: none
 }
 
-#heat{
+#heat {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -210,34 +180,39 @@ body {
     margin: 20px auto;
 }
 
-  .property {
+.property {
     background-color: #FFFFFF;
     border-radius: 8px;
     box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
     height: 80px;
     padding: 8px 15px;
     width: auto;
-  }
-  .property::after {
+}
+
+.property::after {
     border-top: 9px solid #FFFFFF;
-  }
-  .property .details {
+}
+
+.property .details {
     display: flex;
     flex-direction: column;
     flex: 1;
-  }
-  .property .address {
+}
+
+.property .address {
     font-size: 10px;
     margin-bottom: 10px;
     margin-top: 5px;
-  }
-  .property .features {
+}
+
+.property .features {
     align-items: flex-end;
     display: flex;
     flex-direction: row;
     gap: 10px;
-  }
-  .property .features > div {
+}
+
+.property .features>div {
     align-items: center;
     background: #F5F5F5;
     border-radius: 5px;
@@ -247,7 +222,8 @@ body {
     gap: 5px;
     padding: 5px;
     margin-left: 20px;
-  }
+}
+
 .icon {
     width: 30px;
     height: 30px;
